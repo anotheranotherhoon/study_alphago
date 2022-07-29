@@ -22,6 +22,8 @@ function App() {
   const [gameOver, setGameOver] = useState(false)
   const [winnerGrade, setWinnerGrade] = useState(0)
   const nameInput = useRef();
+
+  //event
   const handleChange = (e) => {
     setVal(e.target.value)
   }
@@ -32,7 +34,7 @@ function App() {
     //자동차이름들 중 길이가 5글자를 5글자를 넣는다면 moreThenFiveLetters배열이 존재하게됨
     //자동차이름들 중 아무것도 입력하지 않은 경우 ex)이름,,이름  blank배열이 존재하게됨
     const splitedVal = val.split(',');
-    const moreThenFiveLetters =splitedVal.filter((el)=> el.length > 5);
+    const moreThanFiveLetters =splitedVal.filter((el)=> el.length > 5);
     const blank = splitedVal.filter((el)=> el.length === 0);
     if(splitedVal.length > [...new Set(splitedVal)].length){
       alert("중복된 자동차 이름을 입력하셨습니다.")
@@ -46,7 +48,7 @@ function App() {
       nameInput.current.focus();
       return 
     }
-    if(moreThenFiveLetters.length){
+    if(moreThanFiveLetters.length){
       alert("자동차 이름을 5글자 보다 많이 입력하셨습니다.")
       setVal("")
       nameInput.current.focus();
@@ -59,27 +61,29 @@ function App() {
     setNumberOfRounds(e.target.value)
   }
 
+  
   const handleRoundSubmit = (e) => {
     e.preventDefault();
+    //자동차를 하나도 입력하지 않을 경우, 경주가 시작하지 않게 하기 위해서
     if(carsName.length===0){
       alert("자동차이름을 입력하세요!")
       nameInput.current.focus();
       return
     }
+    // matchResult 변수에 전체 경기결과를 할당한다.
     const matchResult = []
-    //객체 초기화
     for(let i = 0; i < numberOfRounds; i++){
-      const roundRes = []
+      const roundResult = []
       carsName.forEach((name) => {
         if(i===0){
           if(Random.pickNumberInRange(0,9) >= 4){
-            roundRes.push({
+            roundResult.push({
             label : name,
             data : "-"
           })
           }
           else{
-            roundRes.push({
+            roundResult.push({
             label : name,
             data : ""
           })
@@ -87,24 +91,24 @@ function App() {
         }
         else{
           if(Random.pickNumberInRange(0,9)){
-            let filtered = matchResult[i-1].filter((el)=>el.label === name)[0]
-            let newData = filtered.data
-            roundRes.push({
+            let justBeforeResult = matchResult[i-1].filter((el)=>el.label === name)[0]
+            let JustBeforeData = justBeforeResult.data
+            roundResult.push({
               label : name,
-              data : newData + "-"
+              data : JustBeforeData + "-"
             })
           }
           else{
-            let filtered = matchResult[i-1].filter((el)=>el.label === name)[0]
-            let newData = filtered.data
-            roundRes.push({
+            let justBeforeResult = matchResult[i-1].filter((el)=>el.label === name)[0]
+            let JustBeforeData = justBeforeResult.data
+            roundResult.push({
               label : name,
-              data : newData
+              data : JustBeforeData
             })
           }
         }
       })
-      matchResult.push(roundRes)
+      matchResult.push(roundResult)
     }
     const lastRound = matchResult.at(-1)
     const highestGrade = Math.max(...lastRound.map((el)=>el.data.length))
