@@ -71,6 +71,9 @@ function App() {
       return
     }
     // matchResult 변수에 전체 경기결과를 할당한다.
+    // 전체 라운드만큼 반복문을 수행한다.
+    // roundResult 변수에 라운드별 경기결과를 할당하고 matchResult에 push한다.
+    // 첫 번 쨰 라운드의 경우 결과에 따라 초기값을 다르게 설정하고 이후 라운드의 결과에 따라 누적할 수 있게 한다.
     const matchResult = []
     for(let i = 0; i < numberOfRounds; i++){
       const roundResult = []
@@ -110,6 +113,9 @@ function App() {
       })
       matchResult.push(roundResult)
     }
+    // 마지막 라운드의 결과를 통해 우승자를 결정한다. 그리고 마지막 라운드의 결과로 Chart를 만든다.
+    // 우승자들을 담은 배열을 join(',')으로 하나의 문자열로 만든다.
+    // 경기가 끝났을 때만 결과창을 볼 수 있게 조건부 렌더링을 하가 위해 게임이 끝난는지를 boolean으로 표시해준다.
     const lastRound = matchResult.at(-1)
     const highestGrade = Math.max(...lastRound.map((el)=>el.data.length))
     const lastMansData = lastRound.filter((el)=>el.data.length === highestGrade)
