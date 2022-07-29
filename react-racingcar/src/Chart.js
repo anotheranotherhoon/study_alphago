@@ -10,7 +10,7 @@ const Chart = ({newArr,winnerGrade}) => {
         {newArr.map((dataPoint) => (
         <ChartBar
             key={shortid.generate()}
-            value={dataPoint.data}
+            value={dataPoint.data.length}
             maxValue={winnerGrade}
             label={dataPoint.label}
         />
